@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_netflix_clone/model/model_movie.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_netflix_clone/screen/detail_screen.dart';
 
 class CarouselImage extends StatefulWidget {
   final List<Movie> movies;
@@ -22,7 +23,19 @@ class _CarouselImageState extends State<CarouselImage> {
   void initState() {
     super.initState();
     movies = widget.movies;
+
     images = movies.map((m) => Image.asset('./images/' + m.poster)).toList();
+    images = movies
+        .map((m) => Container(
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('images/' + m.poster),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ))
+        .toList();
     keywords = movies.map((m) => m.keyword).toList();
     likes = movies.map((m) => m.like).toList();
     _currentKeyword = keywords[0];
@@ -33,12 +46,11 @@ class _CarouselImageState extends State<CarouselImage> {
     return Container(
       child: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(20),
-          ),
           CarouselSlider(
             items: images,
             options: CarouselOptions(
+              height: MediaQuery.of(context).size.width * 1.2,
+              viewportFraction: 1,
               onPageChanged: (index, reason) {
                 setState(() {
                   _currentPage = index;
@@ -105,7 +117,21 @@ class _CarouselImageState extends State<CarouselImage> {
                   padding: EdgeInsets.only(right: 10),
                   child: Column(
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.info), onPressed: () {}),
+                      IconButton(
+                        icon: Icon(Icons.info),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return DetailScreen(
+                                  movie: movies[_currentPage],
+                                );
+                              },
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                      ),
                       Text(
                         '정보',
                         style: TextStyle(fontSize: 11),
