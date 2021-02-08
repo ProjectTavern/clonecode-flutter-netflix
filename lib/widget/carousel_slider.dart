@@ -49,7 +49,7 @@ class _CarouselImageState extends State<CarouselImage> {
           CarouselSlider(
             items: images,
             options: CarouselOptions(
-              height: MediaQuery.of(context).size.width * 1.2,
+              height: MediaQuery.of(context).size.width * 1.3,
               viewportFraction: 1,
               onPageChanged: (index, reason) {
                 setState(() {
